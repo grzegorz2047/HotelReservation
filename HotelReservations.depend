@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1452797076 source:c:\users\grzeg\onedrive\codeblocks\hotelreservations\main.cpp
+	<iostream>
+	<string>
+	<cctype>
+	<cstdlib>
+
