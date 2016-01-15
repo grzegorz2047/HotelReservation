@@ -6,6 +6,8 @@
 #include "stringutils.h"
 #include "User.h"
 #include <map>
+#include <regex>
+
 /*
  Program codes:
   0 exit program
@@ -76,10 +78,31 @@
         return input;
     }
 
-    void createUser(){
+
+    int createUser(){
+        do{
+            std::string username;
+            std::string password;
+            std::string firstname;
+            std::string lastname;
+            OWNER_TYPE ownerType;
+            std::cout<<"Tworzenie nowego uzytkownika: "<<std::endl;
+            std::cout<<"Podaj nazwe nowego uzytkownika: "<<std::endl;
+            std::cin >> username;
+            std::cout<<"Podaj imie uzytkownika: "<<std::endl;
+            std::cin>> firstname;
+            std::cout<<"Podaj nazwisko uzytkownika: "<<std::endl;
+            std::cin> lastname;
+            std::cout<<"Podaj typ konta oferuj¹cy albo rezerwuj¹cy"<<std::endl;
+
+
+        }while();
+        return 1;
     }
     bool logInUser(std::string username, std::string password){
-        if (users.count(username)>0){
+        if (users.count(username) > 0){
+            std::cout<<"Znalazlem uzytkownika "<<username;
+            std::cin.get();
             User user = users.find(username)->second;
             if(user.getPassword() == password){
                 return true;
@@ -95,6 +118,8 @@
         do{
             std::cout<<"Wpisz nazwe uzytkownika: "<<std::endl;
             std::cin>> username;
+            std::cout<<"Wpisz haslo: "<<std::endl;
+
             std::cin>> password;
             clear_screen();
             bool logged = logInUser(username, password);
@@ -113,23 +138,29 @@
         }while(repeat == "tak");
 
     }
+    int showOwnerInterface(){
+        return 1;
+    }
+    int showClientInterface(){
+        return 1;
+    }
 
     bool chooseStartOption(int input){
         switch (input) {
             case  1:
-            std::cout<<"Siema! Wybrales opcje 1"<<std::endl;
+                return showLoginPage();
             break;
             case  2:
-            createUser();
+                return createUser();
             break;
             case  3:
-            std::cout<<"Siema! Wybrales opcje 3"<<std::endl;
+                return showOwnerInterface();
             break;
             case  4:
-            std::cout<<"Siema! Wybrales opcje 4"<<std::endl;
+                return showClientInterface();
             break;
             case  5:
-            std::cout<<"Siema! Wybrales opcje 5"<<std::endl;
+                return 0;
             break;
         }
     }
@@ -167,9 +198,15 @@
         return userData;
     }
     int main(){
+        int val = 0;
         std::vector<std::string> userData = readFile("users.txt");
         loadUsers(userData);
         std::cout<<"Wczytano "<<userData.size()<<" uzytkownikow"<<std::endl<<std::endl;
-        int input = showStartMenu();
-        chooseStartOption(input);
+        do{
+            int input = showStartMenu();
+            int val = chooseStartOption(input);
+            std::cout<<"Obecny nr to"<<val;
+
+        }while(val == 0);
+        return 0;
     }

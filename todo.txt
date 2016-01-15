@@ -1,4 +1,4 @@
-Napisz program umożliwiający z jednej strony właścicielowi hotelu/pensjonatu wystawienie oferty,
+﻿Napisz program umożliwiający z jednej strony właścicielowi hotelu/pensjonatu wystawienie oferty,
  a z drugiej użytkownikowi rezerwacje oferty. Wymagane funkcje:
 1. Uproszczone tworzenie kont użytkowników dwóch rodzajów: oferującego i rezerwującego
 (użytkownicy powinni być deﬁniowani przez nazwę, hasło oraz typ konta).
@@ -15,3 +15,7 @@ Pomoc ta powinna być podmienialna bez konieczności ponownej kompilacji program
  • Wszystkie ”bazy danych” winny znajdować się w plikach zewnętrznych.
  • Każde konto użytkownika powinno być zapisywane do pliku.
  • Dane wyświetlane powinny mieć sensowną strukturę (np. odpowiednich tabel).
+
+Walidacja username, imie, nazwisko
+http://www.cplusplus.com/reference/regex/regex_match/
+http://cpp0x.pl/artykuly/?id=47
