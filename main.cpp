@@ -4,57 +4,52 @@
 #include <cstdlib>
 #include "fileio.h"
 #include "stringutils.h"
+#include "User.h"
+#include <map>
+/*
+ Program codes:
+  0 exit program
+  1 return main menu
+  2 return client interface
+  3 return owner interface
 
-    enum USER_TYPE {
-        OWNER = 1,
-        CLIENT = 0
-    };
+*/
 
-    class User{
-        private:
-        USER_TYPE userType;
-        std::string password;
-        std::string username;
-        std::string firstname;
-        std::string lastname;
 
-        public:
-        User(std::string username, std::string firstname, std::string lastname, USER_TYPE userType, std::string password){
-            this->username = username;
-            this->firstname = firstname;
-            this->lastname = lastname;
-            this->userType = userType;
-            this->password = password;
-        }
-        std::string getUsername(){
-            return this->username;
-        }
-        std::string getFirstName(){
-            return this->firstname;
-        }
-        std::string getLastName(){
-            return this->lastname;
-        }
-        std::string getPassword(){
-            return this->password;
-        }
-        USER_TYPE getUserType(){
-            return this->userType;
-        }
-        std::string getUserTypeString(){
-            if(this->userType == OWNER){
-                return "owner";
-            }else{
-                return "client";
-            }
-        }
-    };
-    std::vector<User> users;
+/*
 
+  int tries = 0;
+  cin >> tries;
+  for(int i = 0; i < tries; i++){
+    string val = "";
+    string key = "";
+    cin >> key;
+    cin >> val;
+    //dict[key] = val;
+    dict.insert(pair<string,string>(key,val) );
+  }
+  tries = 0;
+  cin >> tries;
+  map<string, string>::iterator it;
+  for(int i = 0; i < tries; i++){
+    string word = "";
+    cin >> word;
+    if (dict.count(word)>0){
+      cout << dict.find(word)->second;
+    }else{
+      cout << word<<endl;
+    }
+  }
+
+*/
+
+
+    //std::vector<User> users;
+    std::map<std::string, User> users;
     void clear_screen(){
         system("cls||clear");
     }
-    int returnStartMenuOptionNumber(){
+    int showStartMenu(){
         std::string char_input;
         int input = 0;
         do{
@@ -83,19 +78,43 @@
 
     void createUser(){
     }
-    void logInUser(std::string username, std::string password){
-        for(int i = 0; i < users.size(); i ++){
-            User user = users[i];
-            if(user.getUsername() == username && user.getPassword() == password){
-                clear_screen();
-                std::cout<<"Zostales pomyslnie zalogowany!"<<std::endl;
-            }else{
-                clear_screen();
-                std::cout<<"Podales niepoprawne haslo badz uzytkownik nie istnieje!"<<std::endl;
+    bool logInUser(std::string username, std::string password){
+        if (users.count(username)>0){
+            User user = users.find(username)->second;
+            if(user.getPassword() == password){
+                return true;
             }
+        }else{
+            return false;
         }
     }
-    void chooseStartOption(int input){
+    int showLoginPage(){
+        std::string repeat = "tak";
+        std::string username;
+        std::string password;
+        do{
+            std::cout<<"Wpisz nazwe uzytkownika: "<<std::endl;
+            std::cin>> username;
+            std::cin>> password;
+            clear_screen();
+            bool logged = logInUser(username, password);
+
+            if(!logged){
+                std::cout<<"Podales niepoprawne haslo badz uzytkownik nie istnieje!"<<std::endl;
+            }else{
+                std::cout<<"Zostales pomyslnie zalogowany!"<<std::endl;
+                User user = users.find(username)->second;
+                if(user.getUserTypeString() == "owner"){
+                    return 3;
+                }else{
+                    return 2;
+                }
+            }
+        }while(repeat == "tak");
+
+    }
+
+    bool chooseStartOption(int input){
         switch (input) {
             case  1:
             std::cout<<"Siema! Wybrales opcje 1"<<std::endl;
@@ -114,8 +133,8 @@
             break;
         }
     }
-    std::vector<User> loadUsers(std::vector<std::string> userData){
-        std::vector<User> users;
+    void loadUsers(std::vector<std::string> userData){
+        users.clear();
         for(int i = 0; i < userData.size(); i++){
             std::vector<std::string> uData = split(userData[i], ':');
             if(uData.empty()){
@@ -127,9 +146,11 @@
             }else{
                 userType = CLIENT;
             }
-            users.push_back(User(uData[0], uData[1], uData[2], userType, uData[4]));
+            users.insert(
+                     std::pair<std::string, User>
+                     (uData[0], User(uData[0], uData[1], uData[2], userType, uData[4]))
+                    );
         }
-        return users;
     }
     std::vector<std::string> usersToStringVector(std::vector<User> users){
         std::vector<std::string> userData;
@@ -147,8 +168,8 @@
     }
     int main(){
         std::vector<std::string> userData = readFile("users.txt");
-        users = loadUsers(userData);
+        loadUsers(userData);
         std::cout<<"Wczytano "<<userData.size()<<" uzytkownikow"<<std::endl<<std::endl;
-        int input = returnStartMenuOptionNumber();
+        int input = showStartMenu();
         chooseStartOption(input);
     }
