@@ -16,7 +16,13 @@
   3 return owner interface
 
 */
-
+enum PROGRAM_STATE{
+    EXIT_SOFT = 0,
+    TO_LOGIN_PAGE = 1
+    BACK_TO_MAIN_MENU = 2,
+    TO_CLIENT_INTERFACE = 3,
+    TO_OWNER_INTERFACE = 4
+};
 
 /*
 
@@ -56,7 +62,7 @@
         int input = 0;
         do{
             std::cout<< "Wybierz zadanie (nr), ktore chcesz wykonac: "<<std::endl;
-            std::cout << "1. Zaloguj sie jako pracownik" << std::endl;
+            std::cout << "1. Zaloguj sie" << std::endl;
             std::cout << "2. Stworz uzytkownika" << std::endl;
             std::cout << "3. Usun uzytkownika" << std::endl;
             std::cout << "4. Wyswietl menu klienta "<< std::endl;
@@ -97,7 +103,7 @@
 
 
         }while();
-        return 1;
+        return BACK_TO_MAIN_MENU;
     }
     bool logInUser(std::string username, std::string password){
         if (users.count(username) > 0){
@@ -126,23 +132,26 @@
 
             if(!logged){
                 std::cout<<"Podales niepoprawne haslo badz uzytkownik nie istnieje!"<<std::endl;
+                std::cout<<"Wrocic do menu glowniego?"<<std::endl;
+                std::cout<<"Wpisz tak lub nie"<<std::endl;
+                std::cin>>repeat;
             }else{
                 std::cout<<"Zostales pomyslnie zalogowany!"<<std::endl;
                 User user = users.find(username)->second;
                 if(user.getUserTypeString() == "owner"){
-                    return 3;
+                    return TO_OWNER_INTERFACE;
                 }else{
-                    return 2;
+                    return TO_CLIENT_INTERFACE;
                 }
             }
         }while(repeat == "tak");
 
     }
     int showOwnerInterface(){
-        return 1;
+        return BACK_TO_MAIN_MENU;
     }
     int showClientInterface(){
-        return 1;
+        return BACK_TO_MAIN_MENU;
     }
 
     bool chooseStartOption(int input){
@@ -160,7 +169,7 @@
                 return showClientInterface();
             break;
             case  5:
-                return 0;
+                return EXIT_SOFT;
             break;
         }
     }
@@ -197,16 +206,18 @@
         }
         return userData;
     }
+    void runInterface(){
+        do{
+            int input = showStartMenu();
+            int val = chooseStartOption(input);
+            std::cout<<"Obecny nr to"<<val;
+        }while(val == 0);
+    }
     int main(){
         int val = 0;
         std::vector<std::string> userData = readFile("users.txt");
         loadUsers(userData);
         std::cout<<"Wczytano "<<userData.size()<<" uzytkownikow"<<std::endl<<std::endl;
-        do{
-            int input = showStartMenu();
-            int val = chooseStartOption(input);
-            std::cout<<"Obecny nr to"<<val;
-
-        }while(val == 0);
+        runInterface();
         return 0;
     }
