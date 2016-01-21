@@ -1,19 +1,14 @@
 ﻿Napisz program umożliwiający z jednej strony właścicielowi hotelu/pensjonatu wystawienie oferty,
  a z drugiej użytkownikowi rezerwacje oferty. Wymagane funkcje:
-1. Uproszczone tworzenie kont użytkowników dwóch rodzajów: oferującego i rezerwującego
-(użytkownicy powinni być deﬁniowani przez nazwę, hasło oraz typ konta).
-2. Uproszczony system logowania.
 3. Wystawianie ofert (deﬁniowanych przez: nazwę hotelu,
 ilość miejsc, cene za miejsce, początku i końca oferty i stan - wolna, zarezerwowana, sprzedana) przez właściciela.
 4. Rezerwowanie ofert przez użytkownika.
 5. Odrzucenie przez oferującego rezerwacji.
 6. Wyświetlanie danych dotyczących ofert z możliwością wyboru rodzaju wyświetlanych ofert.
-7. Inne uzgodnione z prowadzącym.
 Dodatkowe wymagania:
 • Pomoc użytkownika objaśniająca zasady używania programu.
 Pomoc ta powinna być podmienialna bez konieczności ponownej kompilacji programu.
  • Wszystkie ”bazy danych” winny znajdować się w plikach zewnętrznych.
- • Każde konto użytkownika powinno być zapisywane do pliku.
  • Dane wyświetlane powinny mieć sensowną strukturę (np. odpowiednich tabel).
 
 Walidacja username, imie, nazwisko

@@ -22,7 +22,7 @@
         while(!read.eof()){
             getline(read, line);
             if(line != ""){
-                std::cout<<"Wczytano "<<line<<std::endl;
+                //std::cout<<"Wczytano "<<line<<std::endl;
                 lines.push_back(line);
             }
         }

@@ -12,7 +12,8 @@ enum PROGRAM_STATE{
     TO_LOGIN_PAGE = 1,
     BACK_TO_MAIN_MENU = 2,
     TO_CLIENT_INTERFACE = 3,
-    TO_OWNER_INTERFACE = 4
+    TO_OWNER_INTERFACE = 4,
+    SHOW_HELP = 5
 };
     //std::vector<User> users;
     std::map<std::string, User> users;
@@ -29,7 +30,8 @@ enum PROGRAM_STATE{
             std::cout << "2. Stworz uzytkownika" << std::endl;
             std::cout << "3. Usun uzytkownika" << std::endl;
             std::cout << "4. Wyswietl menu klienta "<< std::endl;
-            std::cout << "5. Zakoncz dzialanie programu"<< std::endl;
+            std::cout << "5. Wyswietl pomoc"<< std::endl;
+            std::cout << "6. Zakoncz dzialanie programu"<< std::endl;
 
             std::cin >> char_input;
             input = atoi(char_input.c_str());
@@ -37,7 +39,7 @@ enum PROGRAM_STATE{
                 clear_screen();
                 std::cout<< "Podany znak nie jest cyfra lub wpisales zla opcje! Sprobuj ponownie!"<<std::endl;
             }else{
-                if(char_input != "1" && char_input != "2" && char_input != "3" && char_input != "4" && char_input != "5"){
+                if(char_input != "1" && char_input != "2" && char_input != "3" && char_input != "4" && char_input != "5" && char_input != "6"){
                     clear_screen();
                     std::cout<< "Wybrales zla opcje! Sprobuj ponownie!"<<std::endl;
                     input = 0;
@@ -145,7 +147,20 @@ enum PROGRAM_STATE{
     int showClientInterface(){
         return BACK_TO_MAIN_MENU;
     }
-
+    int showHelp(){
+        std::cout<<std::endl;
+        std::cout<<std::endl;
+        std::vector<std::string> helpLines = readFile("help.txt");
+        for(int i = 0; i < helpLines.size(); i++){
+            std::cout<<helpLines[i];
+            std::cout<<std::endl;
+        }
+        std::cout<<std::endl;
+        std::cout<<std::endl;
+        std::cout<<std::endl;
+        std::cin.get();
+        return BACK_TO_MAIN_MENU;
+    }
     bool chooseStartOption(int input){
         switch (input) {
             case  1:
@@ -161,6 +176,9 @@ enum PROGRAM_STATE{
                 return showClientInterface();
             break;
             case  5:
+                return showHelp();
+            break;
+            case  6:
                 return EXIT_SOFT;
             break;
         }
@@ -204,7 +222,7 @@ enum PROGRAM_STATE{
         do{
             int input = showStartMenu();
             val = chooseStartOption(input);
-            std::cout<<"Obecny nr to "<<val;
+            //std::cout<<"Obecny nr to "<<val;
         }while(val != 0);
     }
     int main(){

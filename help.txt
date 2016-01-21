@@ -1,0 +1,3 @@
+===================================POMOC===================================
+Aby stworzyc uzytkownika wpisz numer, ktory wyswietla sie po prawej stronie ekranu obok opisu opcji.
+===========================================================================
