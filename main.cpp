@@ -7,15 +7,6 @@
 #include "User.h"
 #include <map>
 #include <regex>
-
-/*
- Program codes:
-  0 exit program
-  1 return main menu
-  2 return client interface
-  3 return owner interface
-
-*/
 enum PROGRAM_STATE{
     EXIT_SOFT = 0,
     TO_LOGIN_PAGE = 1,
@@ -23,35 +14,6 @@ enum PROGRAM_STATE{
     TO_CLIENT_INTERFACE = 3,
     TO_OWNER_INTERFACE = 4
 };
-
-/*
-
-  int tries = 0;
-  cin >> tries;
-  for(int i = 0; i < tries; i++){
-    string val = "";
-    string key = "";
-    cin >> key;
-    cin >> val;
-    //dict[key] = val;
-    dict.insert(pair<string,string>(key,val) );
-  }
-  tries = 0;
-  cin >> tries;
-  map<string, string>::iterator it;
-  for(int i = 0; i < tries; i++){
-    string word = "";
-    cin >> word;
-    if (dict.count(word)>0){
-      cout << dict.find(word)->second;
-    }else{
-      cout << word<<endl;
-    }
-  }
-
-*/
-
-
     //std::vector<User> users;
     std::map<std::string, User> users;
     std::vector<std::string> userData;
@@ -98,7 +60,7 @@ enum PROGRAM_STATE{
             std::cout << "Tworzenie nowego uzytkownika: " << std::endl;
             std::cout << "Podaj nazwe nowego uzytkownika: " << std::endl;
             std::cin >> username;
-            if(users.find(username) > 0){
+            if (users.count(username) > 0){
                 std::cout << "Ten uzytkownik juz istnieje!" << std::endl;
             }
             std::cout << "Podaj haslo uzytkownika" << std::endl;
@@ -166,7 +128,7 @@ enum PROGRAM_STATE{
                 std::cout << "Wpisz tak lub nie" << std::endl;
                 std::cin >> repeat;
             }else{
-                std::cout << "Zostales pomyslnie zalogowany!" << std::endl;
+                std::cout << "Zostales pomyslnie zalogowany! " << std::endl;
                 User user = users.find(username)->second;
                 if(user.getUserTypeString() == "owner"){
                     return TO_OWNER_INTERFACE;
@@ -249,7 +211,7 @@ enum PROGRAM_STATE{
         int val = 0;
         userData = readFile("users.txt");
         loadUsers(userData);
-        std::cout<<"Wczytano "<<userData.size()<<" uzytkownikow"<<std::endl<<std::endl;
+        std::cout << "Wczytano " << userData.size() << " uzytkownikow" << std::endl << std::endl;
         runInterface();
         return 0;
     }
