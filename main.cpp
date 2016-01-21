@@ -18,7 +18,7 @@
 */
 enum PROGRAM_STATE{
     EXIT_SOFT = 0,
-    TO_LOGIN_PAGE = 1
+    TO_LOGIN_PAGE = 1,
     BACK_TO_MAIN_MENU = 2,
     TO_CLIENT_INTERFACE = 3,
     TO_OWNER_INTERFACE = 4
@@ -54,6 +54,7 @@ enum PROGRAM_STATE{
 
     //std::vector<User> users;
     std::map<std::string, User> users;
+    std::vector<std::string> userData;
     void clear_screen(){
         system("cls||clear");
     }
@@ -86,23 +87,51 @@ enum PROGRAM_STATE{
 
 
     int createUser(){
+        std::string endUserCreation = "nie";
         do{
             std::string username;
             std::string password;
             std::string firstname;
             std::string lastname;
-            OWNER_TYPE ownerType;
-            std::cout<<"Tworzenie nowego uzytkownika: "<<std::endl;
-            std::cout<<"Podaj nazwe nowego uzytkownika: "<<std::endl;
+            std::string userTypeString;
+            USER_TYPE userType;
+            std::cout << "Tworzenie nowego uzytkownika: " << std::endl;
+            std::cout << "Podaj nazwe nowego uzytkownika: " << std::endl;
             std::cin >> username;
-            std::cout<<"Podaj imie uzytkownika: "<<std::endl;
-            std::cin>> firstname;
-            std::cout<<"Podaj nazwisko uzytkownika: "<<std::endl;
-            std::cin> lastname;
-            std::cout<<"Podaj typ konta oferuj¹cy albo rezerwuj¹cy"<<std::endl;
+            if(users.find(username) > 0){
+                std::cout << "Ten uzytkownik juz istnieje!" << std::endl;
+            }
+            std::cout << "Podaj haslo uzytkownika" << std::endl;
+            std::cin >> password;
+            std::cout << "Podaj imie uzytkownika: " << std::endl;
+            std::cin >> firstname;
+            std::cout << "Podaj nazwisko uzytkownika: " << std::endl;
+            std::cin >> lastname;
+            do{
+                std::cout << "Podaj typ konta: oferujacy albo rezerwujacy" << std::endl;
+                std::cin >> userTypeString;
+            }while(userTypeString != "oferujacy" && userTypeString != "rezerwujacy");
 
-
-        }while();
+            if(userTypeString == "oferujacy"){
+                userType = OWNER;
+            }else{
+                userType = CLIENT;
+            }
+            users.insert(
+                     std::pair<std::string, User>
+                     (username, User(username, firstname, lastname, userType, password)));
+            std::string userToString = "";
+            userToString.append(username).append(":");
+            userToString.append(firstname).append(":");;
+            userToString.append(lastname).append(":");;
+            userToString.append(userTypeString).append(":");
+            userToString.append(password);
+            userData.push_back(userToString);
+            saveFile("users.txt", userData);
+            std::cout << "Konto uzytkownika o nazwie "<<username<<" zostalo utworzone!" << std::endl;
+            std::cout << "Aby zakonczyc tworzenie uzytkownika wpisz tak" << std::endl;
+            std::cin >> endUserCreation;
+        }while(endUserCreation == "nie");
         return BACK_TO_MAIN_MENU;
     }
     bool logInUser(std::string username, std::string password){
@@ -116,6 +145,7 @@ enum PROGRAM_STATE{
         }else{
             return false;
         }
+        return false;
     }
     int showLoginPage(){
         std::string repeat = "tak";
@@ -131,12 +161,12 @@ enum PROGRAM_STATE{
             bool logged = logInUser(username, password);
 
             if(!logged){
-                std::cout<<"Podales niepoprawne haslo badz uzytkownik nie istnieje!"<<std::endl;
-                std::cout<<"Wrocic do menu glowniego?"<<std::endl;
-                std::cout<<"Wpisz tak lub nie"<<std::endl;
-                std::cin>>repeat;
+                std::cout << "Podales niepoprawne haslo badz uzytkownik nie istnieje!" << std::endl;
+                std::cout << "Wrocic do menu glownego?" << std::endl;
+                std::cout << "Wpisz tak lub nie" << std::endl;
+                std::cin >> repeat;
             }else{
-                std::cout<<"Zostales pomyslnie zalogowany!"<<std::endl;
+                std::cout << "Zostales pomyslnie zalogowany!" << std::endl;
                 User user = users.find(username)->second;
                 if(user.getUserTypeString() == "owner"){
                     return TO_OWNER_INTERFACE;
@@ -144,8 +174,8 @@ enum PROGRAM_STATE{
                     return TO_CLIENT_INTERFACE;
                 }
             }
-        }while(repeat == "tak");
-
+        }while(repeat == "nie");
+        return BACK_TO_MAIN_MENU;
     }
     int showOwnerInterface(){
         return BACK_TO_MAIN_MENU;
@@ -172,6 +202,7 @@ enum PROGRAM_STATE{
                 return EXIT_SOFT;
             break;
         }
+        return EXIT_SOFT;
     }
     void loadUsers(std::vector<std::string> userData){
         users.clear();
@@ -207,15 +238,16 @@ enum PROGRAM_STATE{
         return userData;
     }
     void runInterface(){
+        int val = -1;
         do{
             int input = showStartMenu();
-            int val = chooseStartOption(input);
-            std::cout<<"Obecny nr to"<<val;
-        }while(val == 0);
+            val = chooseStartOption(input);
+            std::cout<<"Obecny nr to "<<val;
+        }while(val != 0);
     }
     int main(){
         int val = 0;
-        std::vector<std::string> userData = readFile("users.txt");
+        userData = readFile("users.txt");
         loadUsers(userData);
         std::cout<<"Wczytano "<<userData.size()<<" uzytkownikow"<<std::endl<<std::endl;
         runInterface();

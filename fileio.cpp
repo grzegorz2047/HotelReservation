@@ -21,8 +21,10 @@
         }
         while(!read.eof()){
             getline(read, line);
-            std::cout<<"Wczytano "<<line<<std::endl;
-            lines.push_back(line);
+            if(line != ""){
+                std::cout<<"Wczytano "<<line<<std::endl;
+                lines.push_back(line);
+            }
         }
         read.close();
         return lines;
@@ -31,7 +33,7 @@
         std::ofstream save;
         save.open(filename.c_str());
         for(int i = 0; i < lines.size(); i ++){
-            save << lines[i];
+            save << lines[i] <<std::endl;
         }
         save.close();
     }
