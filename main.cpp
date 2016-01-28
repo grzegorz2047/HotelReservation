@@ -9,6 +9,13 @@
 #include <map>
 #include <regex>
 
+    //std::vector<User> users;
+    std::vector<std::string> userData;
+    std::map<std::string, User> users;
+    std::vector<std::string> offersData;
+    std::map<std::string, Offer> offers;
+
+
 enum PROGRAM_STATE{
     EXIT_SOFT = 0,
     TO_LOGIN_PAGE = 1,
@@ -17,9 +24,6 @@ enum PROGRAM_STATE{
     TO_OWNER_INTERFACE = 4,
     SHOW_HELP = 5
 };
-    //std::vector<User> users;
-    std::map<std::string, User> users;
-    std::vector<std::string> userData;
     void clear_screen(){
         system("cls||clear");
     }
@@ -31,9 +35,60 @@ enum PROGRAM_STATE{
             std::cout << "1. Zaloguj sie" << std::endl;
             std::cout << "2. Stworz uzytkownika" << std::endl;
             std::cout << "3. Usun uzytkownika" << std::endl;
-            std::cout << "4. Wyswietl menu klienta "<< std::endl;
-            std::cout << "5. Wyswietl pomoc"<< std::endl;
-            std::cout << "6. Zakoncz dzialanie programu"<< std::endl;
+            std::cout << "4. Wyswietl pomoc"<< std::endl;
+            std::cout << "5. Zakoncz dzialanie programu"<< std::endl;
+
+            std::cin >> char_input;
+            input = atoi(char_input.c_str());
+            if(input == 0){
+                clear_screen();
+                std::cout<< "Podany znak nie jest cyfra lub wpisales zla opcje! Sprobuj ponownie!"<<std::endl;
+            }else{
+                if(char_input != "1" && char_input != "2" && char_input != "3" && char_input != "4" && char_input != "5" && char_input != "6"){
+                    clear_screen();
+                    std::cout<< "Wybrales zla opcje! Sprobuj ponownie!"<<std::endl;
+                    input = 0;
+                }
+            }
+        }while(input == 0);
+        return input;
+    }
+    int showClientMenu(){
+        std::string char_input;
+        int input = 0;
+        do{
+            std::cout<< "Wybierz zadanie (nr), ktore chcesz wykonac: "<<std::endl;
+            std::cout << "1. Zaloguj sie" << std::endl;
+            std::cout << "2. Stworz uzytkownika" << std::endl;
+            std::cout << "3. Usun uzytkownika" << std::endl;
+            std::cout << "4. Wyswietl pomoc"<< std::endl;
+            std::cout << "5. Zakoncz dzialanie programu"<< std::endl;
+
+            std::cin >> char_input;
+            input = atoi(char_input.c_str());
+            if(input == 0){
+                clear_screen();
+                std::cout<< "Podany znak nie jest cyfra lub wpisales zla opcje! Sprobuj ponownie!"<<std::endl;
+            }else{
+                if(char_input != "1" && char_input != "2" && char_input != "3" && char_input != "4" && char_input != "5" && char_input != "6"){
+                    clear_screen();
+                    std::cout<< "Wybrales zla opcje! Sprobuj ponownie!"<<std::endl;
+                    input = 0;
+                }
+            }
+        }while(input == 0);
+        return input;
+    }
+    int showOwnerMenu(){
+        std::string char_input;
+        int input = 0;
+        do{
+            std::cout<< "Wybierz zadanie (nr), ktore chcesz wykonac: "<<std::endl;
+            std::cout << "1. Zaloguj sie" << std::endl;
+            std::cout << "2. Stworz uzytkownika" << std::endl;
+            std::cout << "3. Usun uzytkownika" << std::endl;
+            std::cout << "4. Wyswietl pomoc"<< std::endl;
+            std::cout << "5. Zakoncz dzialanie programu"<< std::endl;
 
             std::cin >> char_input;
             input = atoi(char_input.c_str());
@@ -83,7 +138,7 @@ enum PROGRAM_STATE{
         }else if(answer == "zarezerwowana"){
             offerState = RESERVED;
         }else{
-            offerState = BOUGHT;
+            offerState = SOLD;
         }
 
         std::cout << "Pomyslnie dodano oferte!" << std::endl;
@@ -132,7 +187,7 @@ enum PROGRAM_STATE{
             userToString.append(password);
             userData.push_back(userToString);
             saveFile("users.txt", userData);
-            std::cout << "Konto uzytkownika o nazwie "<<username<<" zostalo utworzone!" << std::endl;
+            std::cout << "Konto uzytkownika o nazwie " << username << " zostalo utworzone!" << std::endl;
             std::cout << "Aby zakonczyc tworzenie uzytkownika wpisz tak" << std::endl;
             std::cin >> endUserCreation;
         }while(endUserCreation == "nie");
@@ -140,7 +195,7 @@ enum PROGRAM_STATE{
     }
     bool logInUser(std::string username, std::string password){
         if (users.count(username) > 0){
-            std::cout<<"Znalazlem uzytkownika "<<username;
+            std::cout << "Znalazlem uzytkownika " << username;
             std::cin.get();
             User user = users.find(username)->second;
             if(user.getPassword() == password){
@@ -151,6 +206,53 @@ enum PROGRAM_STATE{
         }
         return false;
     }
+        bool chooseClientMenuOption(int input){
+        switch (input) {
+            case  1:
+                return showOffers();
+            break;
+            case  2:
+                return reserveOffer();
+            break;
+            case  3:
+                return EXIT_SOFT;
+            break;
+        }
+        return EXIT_SOFT;
+    }
+    bool chooseOwnerMenuOption(int input){
+        switch (input) {
+            case  1:
+                return addOffer();
+            break;
+            case  2:
+                return showReservations();
+            break;
+            case  3:
+                return EXIT_SOFT;
+            break;
+        }
+        return EXIT_SOFT;
+    }
+    int showOwnerInterface(){
+        int val = -1;
+        do{
+            int input = showOwnerMenu();
+            val = chooseOwnerMenuOption(input);
+            //std::cout<<"Obecny nr to "<<val;
+        }while(val != 0);
+        return BACK_TO_MAIN_MENU;
+    }
+    int showClientInterface(){
+        int val = -1;
+        do{
+            int input = showClientMenu();
+            val = chooseClientMenuOption(input);
+            //std::cout<<"Obecny nr to "<<val;
+        }while(val != 0);
+        return BACK_TO_MAIN_MENU;
+    }
+
     int showLoginPage(){
         std::string repeat = "tak";
         std::string username;
@@ -173,20 +275,15 @@ enum PROGRAM_STATE{
                 std::cout << "Zostales pomyslnie zalogowany! " << std::endl;
                 User user = users.find(username)->second;
                 if(user.getUserTypeString() == "owner"){
-                    return TO_OWNER_INTERFACE;
+                    return showOwnerInterface();
                 }else{
-                    return TO_CLIENT_INTERFACE;
+                    return showClientInterface();
                 }
             }
         }while(repeat == "nie");
         return BACK_TO_MAIN_MENU;
     }
-    int showOwnerInterface(){
-        return BACK_TO_MAIN_MENU;
-    }
-    int showClientInterface(){
-        return BACK_TO_MAIN_MENU;
-    }
+
     int showHelp(){
         std::cout<<std::endl;
         std::cout<<std::endl;
@@ -201,7 +298,7 @@ enum PROGRAM_STATE{
         std::cin.get();
         return BACK_TO_MAIN_MENU;
     }
-    bool chooseStartOption(int input){
+    bool chooseStartMenuOption(int input){
         switch (input) {
             case  1:
                 return showLoginPage();
@@ -210,15 +307,12 @@ enum PROGRAM_STATE{
                 return createUser();
             break;
             case  3:
-                return showOwnerInterface();
+                return removeUser();
             break;
             case  4:
-                return showClientInterface();
-            break;
-            case  5:
                 return showHelp();
             break;
-            case  6:
+            case  5:
                 return EXIT_SOFT;
             break;
         }
@@ -261,7 +355,7 @@ enum PROGRAM_STATE{
         int val = -1;
         do{
             int input = showStartMenu();
-            val = chooseStartOption(input);
+            val = chooseStartMenuOption(input);
             //std::cout<<"Obecny nr to "<<val;
         }while(val != 0);
     }
