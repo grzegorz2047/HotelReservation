@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1453362676 source:c:\users\grzeg\onedrive\codeblocks\hotelreservations\main.cpp
+1454000286 source:c:\users\grzeg\onedrive\codeblocks\hotelreservations\main.cpp
 	<iostream>
 	<string>
 	<cctype>
@@ -7,7 +7,9 @@
 	"fileio.h"
 	"stringutils.h"
 	"User.h"
+	"Offer.h"
 	<map>
+	<iomanip>
 	<regex>
 
 1453977940 source:c:\users\grzeg\onedrive\codeblocks\hotelreservations\fileio.cpp
@@ -33,7 +35,10 @@
 	<sstream>
 	<vector>
 
-1452814559 c:\users\grzeg\onedrive\codeblocks\hotelreservations\user.h
+1453996218 c:\users\grzeg\onedrive\codeblocks\hotelreservations\user.h
 	<iostream>
+	<string>
+
+1453998584 c:\users\grzeg\onedrive\codeblocks\hotelreservations\offer.h
 	<string>
 

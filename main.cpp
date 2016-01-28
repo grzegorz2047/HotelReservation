@@ -14,8 +14,8 @@
     std::vector<std::string> userData;
     std::map<std::string, User> users;
     std::vector<std::string> offersData;
-    std::vector< Offer> offers;
-
+    std::vector<Offer> offers;
+    std::string loggedInUsername;
 enum PROGRAM_STATE{
     EXIT_SOFT = 0,
     TO_LOGIN_PAGE = 1,
@@ -65,11 +65,9 @@ enum PROGRAM_STATE{
         int input = 0;
         do{
             std::cout<< "Wybierz zadanie (nr), ktore chcesz wykonac: "<<std::endl;
-            std::cout << "1. Zaloguj sie" << std::endl;
-            std::cout << "2. Stworz uzytkownika" << std::endl;
-            std::cout << "3. Usun uzytkownika" << std::endl;
-            std::cout << "4. Wyswietl pomoc"<< std::endl;
-            std::cout << "5. Zakoncz dzialanie programu"<< std::endl;
+            std::cout << "1. Pokaz oferty" << std::endl;
+            std::cout << "2. Zarezerwuj oferte" << std::endl;
+            std::cout << "3. Powrot do menu" << std::endl;
 
             std::cin >> char_input;
             input = atoi(char_input.c_str());
@@ -118,7 +116,7 @@ enum PROGRAM_STATE{
         std::string freeNum;
         std::string startDayOffer, startMonthOffer, startYearOffer;
         std::string endDayOffer, endMonthOffer, endYearOffer;
-        std::string answer;
+        std::string answer = "";
         OFFER_STATE offerState;
         std::cout << "Podaj nazwe hotelu" << std::endl;
         std::cin >> hotelName;
@@ -136,7 +134,7 @@ enum PROGRAM_STATE{
         std::cin >> endMonthOffer;
         std::cout << "Podaj rok konca oferty" << std::endl;
         std::cin >> endYearOffer;
-        while( answer != "wolna" || answer != "zarezerwowana" || answer != "sprzedana"){
+        while( answer != "wolna" && answer != "zarezerwowana" && answer != "sprzedana"){
             std::cout << "Podaj stan oferty tzn. wolna, zarezerwowana lub sprzedana" << std::endl;
             std::cin >> answer;
         }
@@ -218,9 +216,7 @@ enum PROGRAM_STATE{
             std::cin.get();
             User user = users.find(username)->second;
             if(user.getPassword() == password){
-                user.setInstance(user);
                 return true;
-
             }
         }else{
             return false;
@@ -242,13 +238,13 @@ enum PROGRAM_STATE{
         return EXIT_SOFT;
     }
     int showReservations(){
-        for(int i = 0; i < offers.size(); i) {
+        for(int i = 0; i < offers.size(); i++) {
             Offer offer = offers[i];
-             std::cout << "Osoby, ktore zarezerwowaly oferty:";
-             User user;
-            if(offer.getOwnerUsername() == user.instance().getUsername()){
+             std::cout << "Osoby, ktore zarezerwowaly oferty:" << std::endl;
+            User user = users.find(loggedInUsername)->second;
+            if(offer.getOwnerUsername() == user.getUsername()){
                 std::cout << "id oferty: " << i << std::endl
-                << "rezerwujacy: " << offer.getWhoReserverd() << std::endl
+                << "rezerwujacy: " << offer.getWhoReserved() << std::endl
                 << "Nazwa hotelu: " << offer.getHotelName() << std::endl;
             }
         }
@@ -298,11 +294,11 @@ enum PROGRAM_STATE{
         std::string username;
         std::string password;
         do{
-            std::cout<<"Wpisz nazwe uzytkownika: "<<std::endl;
-            std::cin>> username;
-            std::cout<<"Wpisz haslo: "<<std::endl;
+            std::cout << "Wpisz nazwe uzytkownika: "<<std::endl;
+            std::cin >> username;
+            std::cout << "Wpisz haslo: "<<std::endl;
 
-            std::cin>> password;
+            std::cin >> password;
             clear_screen();
             bool logged = logInUser(username, password);
 
@@ -312,6 +308,7 @@ enum PROGRAM_STATE{
                 std::cout << "Wpisz tak lub nie" << std::endl;
                 std::cin >> repeat;
             }else{
+                loggedInUsername = username;
                 std::cout << "Zostales pomyslnie zalogowany! " << std::endl;
                 User user = users.find(username)->second;
                 if(user.getUserTypeString() == "owner"){
@@ -325,16 +322,16 @@ enum PROGRAM_STATE{
     }
 
     int showHelp(){
-        std::cout<<std::endl;
-        std::cout<<std::endl;
+        std::cout << std::endl;
+        std::cout << std::endl;
         std::vector<std::string> helpLines = readFile("help.txt");
         for(int i = 0; i < helpLines.size(); i++){
-            std::cout<<helpLines[i];
-            std::cout<<std::endl;
+            std::cout << helpLines[i];
+            std::cout << std::endl;
         }
-        std::cout<<std::endl;
-        std::cout<<std::endl;
-        std::cout<<std::endl;
+        std::cout << std::endl;
+        std::cout << std::endl;
+        std::cout << std::endl;
         std::cin.get();
         return BACK_TO_MAIN_MENU;
     }
@@ -370,7 +367,7 @@ enum PROGRAM_STATE{
                continue;
             }
             USER_TYPE userType;
-            if(uData[3] == "owner"){
+            if(uData[3] == "oferujacy"){
                 userType = OWNER;
             }else{
                 userType = CLIENT;
@@ -388,17 +385,15 @@ enum PROGRAM_STATE{
             if(oData.empty()){
                continue;
             }
-            OFFER_STATE offerType;
-            if(oData[3] == "free") {
-                offerType = FREE;
-            } else if(oData[3] == "reserved") {
-                offerType = RESERVED;
+            OFFER_STATE offerState;
+            if(oData[9] == "free") {
+                offerState = FREE;
+            } else if(oData[9] == "reserved") {
+                offerState = RESERVED;
             } else {
-                offerType = SOLD;
+                offerState = SOLD;
             }
-            offers.insert(
-                     std::pair<std::string, Offer>
-                     (oData[0], Offer(oData[0], oData[1], oData[2], offerType, oData[4]))
+            offers.push_back(Offer(oData[0], oData[1], oData[2], oData[3] , oData[4], oData[5], oData[6], oData[7], oData[8], oData[10], offerState)
                     );
         }
     }
@@ -407,12 +402,33 @@ enum PROGRAM_STATE{
         for(int i = 0; i < users.size(); i++){
             User user = users[i];
             std::string userstring;
-            userstring.append(user.getUsername());
-            userstring.append(user.getFirstName());
-            userstring.append(user.getLastName());
-            userstring.append(user.getUserTypeString());
+            userstring.append(user.getUsername()).append(":");
+            userstring.append(user.getFirstName()).append(":");
+            userstring.append(user.getLastName()).append(":");
+            userstring.append(user.getUserTypeString()).append(":");
             userstring.append(user.getPassword());
             userData.push_back(userstring);
+        }
+        return userData;
+    }
+    std::vector<std::string> offersToStringVector(std::vector<Offer> offers){
+        std::vector<std::string> userData;
+        for(int i = 0; i < offers.size(); i++){
+            Offer offer = offers[i];
+            std::string oferrStr;
+            oferrStr.append(offer.getOwnerUsername()).append(":");
+            oferrStr.append(offer.getHotelName()).append(":");
+            oferrStr.append(offer.getFreeNum()).append(":");
+            oferrStr.append(offer.getStartDayOffer()).append(":");
+            oferrStr.append(offer.getStartMonthOffer()).append(":");
+            oferrStr.append(offer.getStartYearOffer()).append(":");
+            oferrStr.append(offer.getEndDayOffer()).append(":");
+            oferrStr.append(offer.getEndMonthOffer()).append(":");
+            oferrStr.append(offer.getEndYearOffer()).append(":");
+            oferrStr.append(offer.getWhoReserved()).append(":");
+            oferrStr.append(offer.getOfferStateString());
+
+            userData.push_back(oferrStr);
         }
         return userData;
     }
@@ -425,7 +441,6 @@ enum PROGRAM_STATE{
         }while(val != 0);
     }
     int main(){
-        int val = 0;
         userData = readFile("users.txt");
         loadUsers(userData);
         std::cout << "Wczytano " << userData.size() << " uzytkownikow" << std::endl << std::endl;

@@ -1,4 +1,4 @@
 1:1:1:oferujacy:1
-1:1:1:rezerwujacy:1
+2:2:2:rezerwujacy:2
 w:w:w:oferujacy:w
 test:test:test:oferujacy:test

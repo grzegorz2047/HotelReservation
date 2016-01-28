@@ -32,9 +32,10 @@ class Offer {
             this->endDayOffer = endDayOffer;
             this->endMonthOffer = endMonthOffer;
             this->endYearOffer = endYearOffer;
+            this->offerState = offerState;
             this->whoReserved = whoReserved;
         }
-        std::string getWhoReserverd(){
+        std::string getWhoReserved(){
             return this->whoReserved;
         }
         std::string getOwnerUsername(){
@@ -42,6 +43,11 @@ class Offer {
         }
         OFFER_STATE getOfferState(){
             return this->offerState;
+        }
+        std::string getOfferStateString(){
+            if(this->offerState){
+
+            }
         }
         void setOfferState(OFFER_STATE state){
             this->offerState = state;
