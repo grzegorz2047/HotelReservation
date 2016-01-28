@@ -7,14 +7,14 @@
 #include "User.h"
 #include "Offer.h"
 #include <map>
+#include <iomanip>
 #include <regex>
 
     //std::vector<User> users;
     std::vector<std::string> userData;
     std::map<std::string, User> users;
     std::vector<std::string> offersData;
-    std::map<std::string, Offer> offers;
-
+    std::vector< Offer> offers;
 
 enum PROGRAM_STATE{
     EXIT_SOFT = 0,
@@ -53,6 +53,13 @@ enum PROGRAM_STATE{
         }while(input == 0);
         return input;
     }
+    int showOffers(){
+        for(int i = 0; i < offers.size(); i++) {
+            Offer offer = offers[i];
+            std::cout <<'|' << std::setw(10) << (i) << ". " << '|' << std::setw(30) << offer.getHotelName() << '|' << std::setw(30) << offer.getFreeNum() << '|' << std::endl;
+            //std::cout << (i+1) << ". "<<offer.getHotelName() << std::endl; //Patrz na id
+        }
+    }
     int showClientMenu(){
         std::string char_input;
         int input = 0;
@@ -84,10 +91,10 @@ enum PROGRAM_STATE{
         int input = 0;
         do{
             std::cout<< "Wybierz zadanie (nr), ktore chcesz wykonac: "<<std::endl;
-            std::cout << "1. Zaloguj sie" << std::endl;
-            std::cout << "2. Stworz uzytkownika" << std::endl;
-            std::cout << "3. Usun uzytkownika" << std::endl;
-            std::cout << "4. Wyswietl pomoc"<< std::endl;
+            std::cout << "1. Dodaj oferte" << std::endl;
+            std::cout << "2. Wyswietl rezerwacje" << std::endl;
+            std::cout << "3. Zaakceptuj rezerwacje" << std::endl;
+            std::cout << "4. Odrzuc rezerwacje"<< std::endl;
             std::cout << "5. Zakoncz dzialanie programu"<< std::endl;
 
             std::cin >> char_input;
@@ -105,7 +112,7 @@ enum PROGRAM_STATE{
         }while(input == 0);
         return input;
     }
-    int placeOffer(){
+    int addOffer(){
         std::string ownerUsername;
         std::string hotelName;
         std::string freeNum;
@@ -145,6 +152,18 @@ enum PROGRAM_STATE{
         return BACK_TO_MAIN_MENU;
     }
 
+    int reserveOffer(){
+        std::string offerIdString;
+        int offerId;
+        std::cout << "Podaj nr. id oferty" << std::endl;
+        std::cin >> offerIdString;
+        offerId = atoi(offerIdString.c_str());
+        if(offerId == 0 || offerId >= (offers.size()-1)){
+            std::cout<< "Podano niepoprawny numer id oferty!" << std::endl;
+            return BACK_TO_MAIN_MENU;
+        }
+        return BACK_TO_MAIN_MENU;
+    }
     int createUser(){
         std::string endUserCreation = "nie";
         do{
@@ -199,7 +218,9 @@ enum PROGRAM_STATE{
             std::cin.get();
             User user = users.find(username)->second;
             if(user.getPassword() == password){
+                user.setInstance(user);
                 return true;
+
             }
         }else{
             return false;
@@ -220,6 +241,19 @@ enum PROGRAM_STATE{
         }
         return EXIT_SOFT;
     }
+    int showReservations(){
+        for(int i = 0; i < offers.size(); i) {
+            Offer offer = offers[i];
+             std::cout << "Osoby, ktore zarezerwowaly oferty:";
+             User user;
+            if(offer.getOwnerUsername() == user.instance().getUsername()){
+                std::cout << "id oferty: " << i << std::endl
+                << "rezerwujacy: " << offer.getWhoReserverd() << std::endl
+                << "Nazwa hotelu: " << offer.getHotelName() << std::endl;
+            }
+        }
+        return BACK_TO_MAIN_MENU;
+    }
     bool chooseOwnerMenuOption(int input){
         switch (input) {
             case  1:
@@ -229,6 +263,12 @@ enum PROGRAM_STATE{
                 return showReservations();
             break;
             case  3:
+                return EXIT_SOFT;
+            break;
+            case  4:
+                return EXIT_SOFT;
+            break;
+            case  5:
                 return EXIT_SOFT;
             break;
         }
@@ -298,6 +338,10 @@ enum PROGRAM_STATE{
         std::cin.get();
         return BACK_TO_MAIN_MENU;
     }
+    int removeUser(){
+        return BACK_TO_MAIN_MENU;
+    }
+
     bool chooseStartMenuOption(int input){
         switch (input) {
             case  1:
@@ -334,6 +378,27 @@ enum PROGRAM_STATE{
             users.insert(
                      std::pair<std::string, User>
                      (uData[0], User(uData[0], uData[1], uData[2], userType, uData[4]))
+                    );
+        }
+    }
+    void loadOffers(std::vector<std::string> offerData){
+        offers.clear();
+        for(int i = 0; i < offerData.size(); i++){
+            std::vector<std::string> oData = split(offerData[i], ':');
+            if(oData.empty()){
+               continue;
+            }
+            OFFER_STATE offerType;
+            if(oData[3] == "free") {
+                offerType = FREE;
+            } else if(oData[3] == "reserved") {
+                offerType = RESERVED;
+            } else {
+                offerType = SOLD;
+            }
+            offers.insert(
+                     std::pair<std::string, Offer>
+                     (oData[0], Offer(oData[0], oData[1], oData[2], offerType, oData[4]))
                     );
         }
     }

@@ -15,7 +15,7 @@
         std::string username;
         std::string firstname;
         std::string lastname;
-
+        static User singleton;
         public:
         User(std::string username, std::string firstname, std::string lastname, USER_TYPE userType, std::string password){
             this->username = username;
