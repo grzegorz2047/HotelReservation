@@ -5,8 +5,10 @@
 #include "fileio.h"
 #include "stringutils.h"
 #include "User.h"
+#include "Offer.h"
 #include <map>
 #include <regex>
+
 enum PROGRAM_STATE{
     EXIT_SOFT = 0,
     TO_LOGIN_PAGE = 1,
@@ -48,7 +50,45 @@ enum PROGRAM_STATE{
         }while(input == 0);
         return input;
     }
+    int placeOffer(){
+        std::string ownerUsername;
+        std::string hotelName;
+        std::string freeNum;
+        std::string startDayOffer, startMonthOffer, startYearOffer;
+        std::string endDayOffer, endMonthOffer, endYearOffer;
+        std::string answer;
+        OFFER_STATE offerState;
+        std::cout << "Podaj nazwe hotelu" << std::endl;
+        std::cin >> hotelName;
+        std::cout << "Podaj ilosc miejsc" << std::endl;
+        std::cin >> freeNum;
+        std::cout << "Podaj dzien poczatku oferty" << std::endl;
+        std::cin >> startDayOffer;
+        std::cout << "Podaj miesiac poczatku oferty" << std::endl;
+        std::cin >> startMonthOffer;
+        std::cout << "Podaj rok poczatku oferty" << std::endl;
+        std::cin >> startYearOffer;
+        std::cout << "Podaj dzien konca oferty" << std::endl;
+        std::cin >> endDayOffer;
+        std::cout << "Podaj miesiac konca oferty" << std::endl;
+        std::cin >> endMonthOffer;
+        std::cout << "Podaj rok konca oferty" << std::endl;
+        std::cin >> endYearOffer;
+        while( answer != "wolna" || answer != "zarezerwowana" || answer != "sprzedana"){
+            std::cout << "Podaj stan oferty tzn. wolna, zarezerwowana lub sprzedana" << std::endl;
+            std::cin >> answer;
+        }
+        if(answer == "wolna"){
+            offerState = FREE;
+        }else if(answer == "zarezerwowana"){
+            offerState = RESERVED;
+        }else{
+            offerState = BOUGHT;
+        }
 
+        std::cout << "Pomyslnie dodano oferte!" << std::endl;
+        return BACK_TO_MAIN_MENU;
+    }
 
     int createUser(){
         std::string endUserCreation = "nie";
