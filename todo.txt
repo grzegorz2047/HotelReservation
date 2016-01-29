@@ -15,6 +15,5 @@ Walidacja username, imie, nazwisko
 http://www.cplusplus.com/reference/regex/regex_match/
 http://cpp0x.pl/artykuly/?id=47
 
-pokazywanie ofert w miare ladnie xd uzywajac tabulacji (cout)
-dodawanie ofert do "bazy"
-pokazywanie menu clienta i wlasciciela
+menu, ktore robi filtrowanie
+dodaj price do load, save offer

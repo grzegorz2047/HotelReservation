@@ -15,6 +15,7 @@ class Offer {
         std::string endDayOffer, endMonthOffer, endYearOffer;
         std::string whoReserved = ""; // Jezeli nikt to empty
         OFFER_STATE offerState;
+        float price;
     public:
         Offer(std::string ownerUsername,
         std::string hotelName,
@@ -22,7 +23,7 @@ class Offer {
         std::string startDayOffer, std::string startMonthOffer, std::string startYearOffer,
         std::string endDayOffer, std::string endMonthOffer, std::string endYearOffer,
         std::string whoReserved,
-        OFFER_STATE offerState){
+        OFFER_STATE offerState, float price){
             this->ownerUsername = ownerUsername;
             this->hotelName = hotelName;
             this->freeNum = freeNum;
@@ -34,6 +35,7 @@ class Offer {
             this->endYearOffer = endYearOffer;
             this->offerState = offerState;
             this->whoReserved = whoReserved;
+            this->price = price;
         }
         std::string getWhoReserved(){
             return this->whoReserved;
@@ -45,8 +47,12 @@ class Offer {
             return this->offerState;
         }
         std::string getOfferStateString(){
-            if(this->offerState){
-
+            if(this->offerState == FREE){
+                return "wolna";
+            }else if(this->offerState == RESERVED){
+                return "zarezerwowana";
+            }else{
+                return "sprzedana";
             }
         }
         void setOfferState(OFFER_STATE state){
@@ -76,6 +82,27 @@ class Offer {
         }
         std::string getEndYearOffer(){
             return this->endYearOffer;
+        }
+        void setWhoReserved(std::string username){
+            this->whoReserved = username;
+        }
+        float getPrice(){
+            return this->price;
+        }
+        std::string toString(){
+            std::string str;
+            str.append(this->getOwnerUsername()).append(":");
+            str.append(this->getHotelName()).append(":");
+            str.append(this->getFreeNum()).append(":");
+            str.append(this->getStartDayOffer()).append(":");
+            str.append(this->getStartMonthOffer()).append(":");
+            str.append(this->getStartYearOffer()).append(":");
+            str.append(this->getEndDayOffer()).append(":");
+            str.append(this->getEndMonthOffer()).append(":");
+            str.append(this->getEndYearOffer()).append(":");
+            str.append(this->getWhoReserved()).append(":");
+            str.append(this->getOfferStateString());
+            return str;
         }
 };
 

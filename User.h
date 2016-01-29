@@ -41,10 +41,19 @@
         }
         std::string getUserTypeString(){
             if(this->userType == OWNER){
-                return "owner";
+                return "oferujacy";
             }else{
-                return "client";
+                return "rezerwujacy";
             }
+        }
+        std::string toString(){
+            std::string str;
+            str.append(username).append(":");
+            str.append(firstname).append(":");;
+            str.append(lastname).append(":");;
+            str.append(getUserTypeString()).append(":");
+            str.append(password);
+            return str;
         }
     };
 
