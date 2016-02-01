@@ -11,11 +11,19 @@
 #include <regex>
 
     //std::vector<User> users;
-    std::vector<std::string> userData;
-    std::map<std::string, User> users;
-    std::vector<std::string> offerData;
-    std::vector<Offer> offers;
-    std::string loggedInUsername;
+std::vector<std::string> userData;
+std::map<std::string, User> users;
+std::vector<std::string> offerData;
+std::vector<Offer> offers;
+std::string loggedInUsername;
+
+struct Filter {
+    std::string hotelName;
+    int freeNum;
+    float price;
+    std::string startDate;
+    std::string endDate;
+};
 
 
 enum PROGRAM_STATE{
@@ -55,13 +63,55 @@ enum PROGRAM_STATE{
         }while(input == 0);
         return input;
     }
+
+    showOffersUsingFilters(){
+        Filter filter;
+        std::cout << "Podaj nazwe szukanego hotelu! W innym przypadku wpisz brak." << std::endl;
+        std::cin >> filter.hotelName;
+        std::cout << "Podaj ilosc miejsc! W innym przypadku wpisz brak." << std::endl;
+        std::string val;
+        std::cin >> val;
+        filter.freeNum = atoi(val.c_str());
+        if(filter.freeNum == 0){
+            filter.freeNum = 0;
+        }
+        std::cout << "Podaj podaj cene! W innym przypadku wpisz brak." << std::endl;
+                std::cin >> val;
+        filter.price = atof(val.c_str());
+        if(filter.price == 0){
+            filter.price = 0;
+        }
+        //std::cout << "Podaj startowa date! Np. \"20-12-2016\" (bez cudzys³owia). W innym przypadku wpisz brak." << std::endl;
+        //std::cout << "Podaj koncowa date! Np. \"20-12-2016\" (bez cudzys³owia). W innym przypadku wpisz brak." << std::endl;
+        clear_screen();
+        std::cout << "Dostepne oferty: " << std::endl;
+        std::cout <<'|' << std::setw(8) << "Id oferty" << '|' << std::setw(20) << "Nazwa hotelu" << '|' << std::setw(20) << "Rezerwujacy" << '|' << std::setw(20) << "cena" << '|' << std::setw(20) << "liczba miejsc" << '|'  << std::setw(20) << "stan"<< '|' << std::endl;
+        for(int i = 0; i < offers.size(); i++) {
+            Offer offer = offers[i];
+            if((offer.getHotelName() == filter.hotelName) && filter.hotelName != "brak"){
+                std::cout <<'|' << std::setw(8) << (i) << "." << '|' << std::setw(20) << offer.getHotelName() << '|' << std::setw(20) << offer.getWhoReserved() << '|' << std::setw(20) << offer.getPrice() << '|' << std::setw(20) << offer.getFreeNum() << '|' << std::setw(20) << offer.getOfferStateString() << '|' << std::endl;
+            }
+            else if((atoi(offer.getFreeNum().c_str()) == filter.freeNum)  && filter.freeNum != 0){
+                std::cout <<'|' << std::setw(8) << (i) << "." << '|' << std::setw(20) << offer.getHotelName() << '|' << std::setw(20) << offer.getWhoReserved() << '|' << std::setw(20) << offer.getPrice() << '|' << std::setw(20) << offer.getFreeNum() << '|' << std::setw(20) << offer.getOfferStateString() << '|' << std::endl;
+            }
+            else if((offer.getPrice() == filter.price)  && filter.price != 0){
+                std::cout <<'|' << std::setw(8) << (i) << "." << '|' << std::setw(20) << offer.getHotelName() << '|' << std::setw(20) << offer.getWhoReserved() << '|' << std::setw(20) << offer.getPrice() << '|' << std::setw(20) << offer.getFreeNum() << '|' << std::setw(20) << offer.getOfferStateString() << '|' << std::endl;
+            }else{
+                std::cout << "" << std::endl;
+                std::cout << "Brak ofert z takimi parametrami";
+                std::cout << "" << std::endl;
+            }
+        }
+         std::cout << "" << std::endl;
+         return BACK_TO_MAIN_MENU;
+    }
     int showOffers(){
         clear_screen();
         std::cout << "Dostepne oferty: " << std::endl;
-        std::cout <<'|' << std::setw(8) << "Id oferty" << '|' << std::setw(30) << "Nazwa hotelu" << '|' << std::setw(30) << "liczba miejsc" << '|'  << std::setw(30) << "stan"<< '|' << std::endl;
+        std::cout <<'|' << std::setw(8) << "Id oferty" << '|' << std::setw(20) << "Nazwa hotelu" << '|' << std::setw(20) << "Rezerwujacy" << '|' << std::setw(20) << "cena" << '|' << std::setw(20) << "liczba miejsc" << '|'  << std::setw(20) << "stan"<< '|' << std::endl;
         for(int i = 0; i < offers.size(); i++) {
             Offer offer = offers[i];
-            std::cout <<'|' << std::setw(8) << (i) << "." << '|' << std::setw(30) << offer.getHotelName() << '|' << std::setw(30) << offer.getFreeNum() << '|' << offer.getOfferStateString() << std::endl;
+            std::cout <<'|' << std::setw(8) << (i) << "." << '|' << std::setw(20) << offer.getHotelName() << '|' << std::setw(20) << offer.getWhoReserved() << '|' << std::setw(20) << offer.getPrice() << '|' << std::setw(20) << offer.getFreeNum() << '|' << std::setw(20) << offer.getOfferStateString() << '|' << std::endl;
             //std::cout << (i+1) << ". "<<offer.getHotelName() << std::endl; //Patrz na id
         }
          std::cout << "" << std::endl;
@@ -73,8 +123,9 @@ enum PROGRAM_STATE{
         do{
             std::cout<< "Wybierz zadanie (nr), ktore chcesz wykonac: "<<std::endl;
             std::cout << "1. Pokaz oferty" << std::endl;
-            std::cout << "2. Zarezerwuj oferte" << std::endl;
-            std::cout << "3. Powrot do menu" << std::endl;
+            std::cout << "2. Pokaz oferty uzywajac filtrowania danych" << std::endl;
+            std::cout << "3. Zarezerwuj oferte" << std::endl;
+            std::cout << "4. Powrot do menu" << std::endl;
 
             std::cin >> char_input;
             input = atoi(char_input.c_str());
@@ -402,9 +453,12 @@ enum PROGRAM_STATE{
                 return showOffers();
             break;
             case  2:
-                return reserveOffer();
+                return showOffersUsingFilters();
             break;
             case  3:
+                return reserveOffer();
+            break;
+            case  4:
                 return EXIT_SOFT;
             break;
         }
@@ -413,13 +467,14 @@ enum PROGRAM_STATE{
     int showReservations(){
         std::cout << "Osoby, ktore zarezerwowaly oferty:" << std::endl;
         std::cout << "" << std::endl;
-        std::cout <<'|' << std::setw(8) << "Id oferty" << '|' << std::setw(30) << "Nazwa hotelu" << '|' << std::setw(30) << "Rezerwujacy" << '|' << std::setw(30) << "cena" << '|' << std::setw(30) << "liczba miejsc" << '|'  << std::setw(30) << "stan"<< '|' << std::endl;
+        std::cout <<'|' << std::setw(8) << "Id oferty" << '|' << std::setw(20) << "Nazwa hotelu" << '|' << std::setw(20) << "Rezerwujacy" << '|' << std::setw(20) << "cena" << '|' << std::setw(20) << "liczba miejsc" << '|'  << std::setw(20) << "stan"<< '|' << std::endl;
+
         for(int i = 0; i < offers.size(); i++) {
             Offer offer = offers[i];
             User user = users.find(loggedInUsername)->second;
             if(offer.getOwnerUsername() == user.getUsername()){
                 if(offer.getOfferState() == RESERVED){
-                    std::cout <<'|' << std::setw(8) << (i) << "." << '|' << std::setw(30) << offer.getHotelName() << '|' << std::setw(30) << offer.getWhoReserved() << '|' << std::setw(30) << offer.getPrice() << '|' << std::setw(30) << offer.getFreeNum() << '|' << offer.getOfferStateString() << std::endl;
+                    std::cout <<'|' << std::setw(8) << (i) << "." << '|' << std::setw(20) << offer.getHotelName() << '|' << std::setw(20) << offer.getWhoReserved() << '|' << std::setw(20) << offer.getPrice() << '|' << std::setw(20) << offer.getFreeNum() << '|' << std::setw(20) << offer.getOfferStateString() << '|' << std::endl;
                     std::cout << "" << std::endl;
                 }
             }

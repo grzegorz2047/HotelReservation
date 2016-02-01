@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1454063515 source:c:\users\grzeg\onedrive\codeblocks\hotelreservations\main.cpp
+1454066418 source:c:\users\grzeg\onedrive\codeblocks\hotelreservations\main.cpp
 	<iostream>
 	<string>
 	<cctype>
@@ -39,6 +39,6 @@
 	<iostream>
 	<string>
 
-1454060384 c:\users\grzeg\onedrive\codeblocks\hotelreservations\offer.h
+1454064255 c:\users\grzeg\onedrive\codeblocks\hotelreservations\offer.h
 	<string>
 

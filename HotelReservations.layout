@@ -2,28 +2,9 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
-	<File name="main.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="14732" topLine="372" />
-		</Cursor>
-		<Folding>
-			<Collapse line="18" />
-			<Collapse line="26" />
-		</Folding>
-	</File>
-	<File name="Offer.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="71" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="fileio.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="37" topLine="0" />
-		</Cursor>
-	</File>
 	<File name="User.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="400" topLine="28" />
+			<Cursor1 position="1330" topLine="29" />
 		</Cursor>
 	</File>
 	<File name="fileio.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -31,5 +12,45 @@
 			<Cursor1 position="199" topLine="0" />
 		</Cursor>
 	</File>
-	<EditorTabsLayout layout="0a4d984856aa3217000059c700000002=*0;HotelReservations:main.cpp,1;HotelReservations:fileio.cpp,2;HotelReservations:Offer.h,3;HotelReservations:User.h@layout2|name=dummy;caption=;state=2098174;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=519;besth=158;minw=519;minh=158;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=0a4d984856aa3217000059c700000002;caption=;state=2098172;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=200;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=202|" />
+	<File name="main.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="23363" topLine="47" />
+		</Cursor>
+		<Folding>
+			<Collapse line="20" />
+			<Collapse line="28" />
+			<Collapse line="31" />
+			<Collapse line="69" />
+			<Collapse line="93" />
+			<Collapse line="119" />
+			<Collapse line="207" />
+			<Collapse line="250" />
+			<Collapse line="293" />
+			<Collapse line="337" />
+			<Collapse line="385" />
+			<Collapse line="398" />
+			<Collapse line="412" />
+			<Collapse line="429" />
+			<Collapse line="449" />
+			<Collapse line="458" />
+			<Collapse line="468" />
+			<Collapse line="500" />
+			<Collapse line="514" />
+			<Collapse line="518" />
+			<Collapse line="538" />
+			<Collapse line="576" />
+			<Collapse line="584" />
+		</Folding>
+	</File>
+	<File name="Offer.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2792" topLine="42" />
+		</Cursor>
+	</File>
+	<File name="fileio.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="37" topLine="9" />
+		</Cursor>
+	</File>
+	<EditorTabsLayout layout="0adb938856aa3f85000079bf00000002=*0;HotelReservations:main.cpp,1;HotelReservations:fileio.cpp,2;HotelReservations:Offer.h,3;HotelReservations:User.h@layout2|name=dummy;caption=;state=2098174;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=577;besth=216;minw=577;minh=216;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=0adb938856aa3f85000079bf00000002;caption=;state=2098172;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=200;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=202|" />
 </CodeBlocks_layout_file>
